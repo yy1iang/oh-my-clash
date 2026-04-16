@@ -90,13 +90,14 @@ proxy-groups:
 ## Load Rule Sets from Web
 rule-anchor:
   .DOMAIN_MRS: &DOMAIN_MRS {type: http, interval: *UPDATE_IV, behavior: domain, format: mrs}
-  .DOMAIN_LIST: &DOMAIN_MRS {type: http, interval: *UPDATE_IV, behavior: domain, format: text}
+  .DOMAIN_LST: &DOMAIN_MRS {type: http, interval: *UPDATE_IV, behavior: domain, format: text}
   .IP_MRS: &IP_MRS {type: http, interval: *UPDATE_IV, behavior: ipcidr, format: mrs}
 
 rule-providers:
-  ai-domains: { <<: *DOMAIN_LIST, url: "https://raw.githubusercontent.com/yy1iang/oh-my-clash/refs/heads/main/rulesets/ai.list"}
+  ai-domains: { <<: *DOMAIN_LST, url: "https://raw.githubusercontent.com/yy1iang/oh-my-clash/refs/heads/main/rulesets/ai.list"}
   github-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/github.mrs"}
   reddit-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/reddit.mrs"}
+  bio-domains: { <<: *DOMAIN_LST, url: "https://raw.githubusercontent.com/yy1iang/oh-my-clash/refs/heads/main/rulesets/biology.list"}
   netflix-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/netflix.mrs"}
   meta-doamins: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/meta.mrs"}               # Facebook, Instegram, Whatsapp
   x-doamins: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/x.mrs"}                     # Twitter, Grok
@@ -116,6 +117,7 @@ rules:
   - RULE-SET,ai-domains,UnitedStates
   - RULE-SET,github-domains,HongKong
   - RULE-SET,reddit-domains,HongKong
+  - RULE-SET,bio-domains,HongKong
   - RULE-SET,netflix-domains,HongKong
   - RULE-SET,meta-domains,HongKong
   - RULE-SET,x-domains,HongKong
