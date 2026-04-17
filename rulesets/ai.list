@@ -30,12 +30,6 @@ production-openaicom-storage.azureedge.net
 
 ## Google Gemini
 ai.google.dev
-alkalicore-pa.clients6.google.com
-alkalimakersuite-pa.clients6.google.com
-webchannel-alkalimakersuite-pa.clients6.google.com
-cloudaicompanion.googleapis.com
-cloudcode-pa.googleapis.com
-daily-cloudcode-pa.googleapis.com
 notebooklm-pa.googleapis.com
 notebooklm.googleapis.com
 antigravity-pa.googleapis.com
@@ -56,15 +50,6 @@ antigravity.googleapis.com
 +.aistudio.google.com
 +.notebooklm.google.com
 +.makersuite.google.com
-+.jules.google.com
-+.robinfrontend-pa.googleapis.com
-+.bard.google.com
-+.aisandbox-pa.googleapis.com
-+.aida.googleapis.com
-+.proactivebackend-pa.googleapis.com
-+.opal.google.com
-+.generativelanguage.googleapis.com
-+.geller-pa.googleapis.com
 
 ## OpenRouter
 +.openrouter.ai
