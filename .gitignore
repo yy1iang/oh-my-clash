@@ -2,3 +2,5 @@
 misc
 config/config.ini
 config/template.yaml
+config/FlowerCloud.yaml
+in-used-config.yaml
