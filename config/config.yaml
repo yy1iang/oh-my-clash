@@ -12,7 +12,7 @@
 
 ## Subscription Info
 proxy-providers:
-  FlowerCloud:            # Custom Name for Nodes Provider
+  provider_1:             # Custom Name for Nodes Provider
     type: http            # Fetch nodes from http
     url: "your-subscription-link"
     proxy: DIRECT         # Fetch nodes via DIRECT traffic
@@ -21,6 +21,7 @@ proxy-providers:
       enable: true
       url: https://www.gstatic.com/generate_204 # Connection test site
       interval: *UPDATE_IV
+  # provider_2:             # You can add multiple prodivers below
 
 
 ## Global Proxy Settings
