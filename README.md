@@ -6,7 +6,7 @@
 > Apr 09, 2026
 
 
-## Scturture
+## Structure
 
 - [`config/config.yaml`](./config/config.yaml): A one-setp universal config template for [mihomo](https://github.com/metacubex/mihomo) kernel, from fetching nodes from provider to traffic controls.
 - [`rulesets/`](./rulesets/): Combining rulesets picked from provider and customized.
