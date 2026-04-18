@@ -1,4 +1,9 @@
+## Clash Config
+## Schema: https://raw.githubusercontent.com/MetaCubeX/mihomo/refs/heads/Meta/docs/config.yaml
+
 ## Set Up Global Variables
+##   Test node speed in every 5 minutes
+##   Update subscription in every 24 hours
 .VARIABLES:
   - &SPEEDTEST_IV 300     # 5 mins
   - &UPDATE_IV 86400      # 24 hours
@@ -7,15 +12,15 @@
 
 ## Subscription Info
 proxy-providers:
-  AirPort:            # Custom Name for Nodes Provider
-    url: "your-clash-subcription-link"
+  FlowerCloud:            # Custom Name for Nodes Provider
     type: http            # Fetch nodes from http
+    url: "your-subscription-link"
+    proxy: DIRECT         # Fetch nodes via DIRECT traffic
     interval: *UPDATE_IV  # Auto-update interval
     health-check:
       enable: true
       url: https://www.gstatic.com/generate_204 # Connection test site
       interval: *UPDATE_IV
-    proxy: LocalDirect    # Proxy group to use while fetching nodes from provider
 
 
 ## Global Proxy Settings
@@ -26,24 +31,14 @@ mixed-port: 7893
 tproxy-port: 7894
 allow-lan: true
 bind-address: "*"
-unified-delay: true
+unified-delay: false
 tcp-concurrent: true
 mode: rule
 log-level: info
 ipv6: false
 profile:
-  store-selected: true
-  store-fake-ip: true
-
-
-## Enable Sniffing (Optional)
-sniffer:
-  enable: true
-  sniff:
-    TLS:
-      ports: [443, 8443]
-    HTTP:
-      ports: [80, 8080-8888]
+  store-selected: true   # Memorize the node selected last time
+  store-fake-ip: true    # Cache fake-ip mappings to local for faster access
 
 
 ## DNS Settings (DO NOT MODIFY FOR UNKNOWN REASONS)
@@ -51,29 +46,17 @@ dns:
   enable: true
   ipv6: false
   listen: 0.0.0.0:53
-  respect-rules: false            # Access DNS following to rules
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
-  fake-ip-filter-mode: blacklist  # IP in list below will bypass fake-ip returns
   fake-ip-filter:
     - "*.lan"
-    - "rule-set:github-domains"
-  default-nameserver:             # Bootstrap DNS (plain UDP, no proxy)
-    - 223.5.5.5
-    - 119.29.29.29
-  direct-nameserver-follow-policy: false  # If true, DNS for resolving direct traffics need to be selected based on DNS policy
-  direct-nameserver:              # DNS for resolving domains in direct traffics
-    - 223.5.5.5 
-  proxy-server-nameserver:        # DNS for resolving domains of nodes
-    - 223.5.5.5
-  nameserver:                     # Primary resolvers
-    - 223.5.5.5
-    - 119.29.29.29
+  nameserver:
+    - 223.5.5.5       # Aliyun
+    - 119.29.29.29    # Tencent
 
 
 ## Group Nodes Fetched from Providers
 proxy-groups:
-  - {name: LocalDirect, type: select, proxies: [DIRECT]}
   - {name: ALL, type: select, include-all: true}
   - {name: HongKong, include-all: true, type: fallback, interval: *SPEEDTEST_IV, filter: "(?i)香港|hong\\s?kong|hk"}
   - {name: Macau, include-all: true, type: fallback, interval: *SPEEDTEST_IV, filter: "(?i)澳门|macau|macao|mo"}
@@ -84,48 +67,46 @@ proxy-groups:
   - {name: UnitedStates, include-all: true, type: fallback, interval: *SPEEDTEST_IV, filter: "(?i)美国|united\\s?states|usa|us"}
   - {name: UnitedKingdom, include-all: true, type: fallback, interval: *SPEEDTEST_IV, filter: "(?i)英国|united\\s?kingdom|uk"}
   - {name: Canada, include-all: true, type: fallback, interval: *SPEEDTEST_IV, filter: "(?i)加拿大|canada|ca"}
-  - {name: Others, type: select, include-all: true, exclude-filter: "(?i)香港|hong\\s?kong|hk|澳门|macau|macao|mo|台湾|taiwan|tw|新加坡|狮城|singapore|sg|美国|united\\s?states|usa|us|日本|japan|jp|英国|united\\s?kingdom|uk|加拿大|canada|ca"}
+  - {name: Others, type: select, include-all: true, exclude-filter: "(?i)香港|hong\\s?kong|hk|澳门|macau|macao|mo|台湾|taiwan|tw|新加坡|狮城|singapore|sg|美国|united\\s?states|usa|us|日本|东京|tokyo|japan|jp|韩国|南韩|首尔|seoul|korea|south\\s?korea|kr|英国|united\\s?kingdom|uk|加拿大|canada|ca"}
 
 
-## Load Rule Sets from Web
+## Subcribe Rule Sets from providers
 rule-anchor:
-  .DOMAIN_MRS: &DOMAIN_MRS {type: http, interval: *UPDATE_IV, behavior: domain, format: mrs}
-  .DOMAIN_LST: &DOMAIN_MRS {type: http, interval: *UPDATE_IV, behavior: domain, format: text}
-  .IP_MRS: &IP_MRS {type: http, interval: *UPDATE_IV, behavior: ipcidr, format: mrs}
+  .DOMAIN_MRS: &DOMAIN_MRS {type: http, interval: *UPDATE_IV, behavior: domain, format: mrs, proxy: HongKong}   # Fetch rule list from provider with proxy traffic
+  .DOMAIN_LST: &DOMAIN_LST {type: http, interval: *UPDATE_IV, behavior: domain, format: text, proxy: HongKong}
+  .IP_MRS: &IP_MRS {type: http, interval: *UPDATE_IV, behavior: ipcidr, format: mrs, proxy: HongKong}
 
 rule-providers:
   ai-domains: { <<: *DOMAIN_LST, url: "https://raw.githubusercontent.com/yy1iang/oh-my-clash/refs/heads/main/rulesets/ai.list"}
+  bio-domains: { <<: *DOMAIN_LST, url: "https://raw.githubusercontent.com/yy1iang/oh-my-clash/refs/heads/main/rulesets/biology.list"}
   github-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/github.mrs"}
   reddit-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/reddit.mrs"}
-  bio-domains: { <<: *DOMAIN_LST, url: "https://raw.githubusercontent.com/yy1iang/oh-my-clash/refs/heads/main/rulesets/biology.list"}
+  synology-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/synology.mrs"}
   netflix-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/netflix.mrs"}
-  meta-doamins: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/meta.mrs"}               # Facebook, Instegram, Whatsapp
-  x-doamins: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/x.mrs"}                     # Twitter, Grok
-  google-IPs: { <<: *IP_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/google.mrs"}
+  meta-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/meta.mrs"}               # Facebook, Instegram, Whatsapp
+  x-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/x.mrs"}                     # Twitter, Grok
   google-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/google.mrs"}
-  # cloudflare-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/cloudflare.mrs"}
-  # cloudflare-IPs: { <<: *IP_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/cloudflare.mrs"}
   apple-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/apple.mrs"}
   microsoft-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/microsoft.mrs"}
-  KR-IPs: { <<: *IP_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/kr.mrs"}
   CN-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/cn.mrs"}
   CN-IPs: { <<: *IP_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/cn.mrs"}
 
 
 ## Assign Proxy Group to Rule Set
 rules:
+  - SRC-IP-CIDR,192.168.2.136/32,DIRECT    # webcam
+  - SRC-IP-CIDR,192.168.2.171/32,DIRECT    # webcam
   - RULE-SET,ai-domains,UnitedStates
-  - RULE-SET,github-domains,HongKong
-  - RULE-SET,reddit-domains,HongKong
+  - RULE-SET,github-domains,UnitedStates
+  - RULE-SET,reddit-domains,UnitedStates
   - RULE-SET,bio-domains,HongKong
   - RULE-SET,netflix-domains,HongKong
   - RULE-SET,meta-domains,HongKong
   - RULE-SET,x-domains,HongKong
-  - RULE-SET,google-IPs,HongKong
   - RULE-SET,google-domains,HongKong
   - RULE-SET,microsoft-domains,HongKong
   - RULE-SET,apple-domains,DIRECT
-  - RULE-SET,KR-IPs,Korea,no-resolve
+  - RULE-SET,synology-domains,DIRECT
   - RULE-SET,CN-domains,DIRECT
   - RULE-SET,CN-IPs,DIRECT
-  - MATCH,DIRECT
+  - MATCH,HongKong
