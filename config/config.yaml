@@ -80,15 +80,18 @@ rule-anchor:
 rule-providers:
   ai-domains: { <<: *DOMAIN_LST, url: "https://raw.githubusercontent.com/yy1iang/oh-my-clash/refs/heads/main/rulesets/ai.list"}
   bio-domains: { <<: *DOMAIN_LST, url: "https://raw.githubusercontent.com/yy1iang/oh-my-clash/refs/heads/main/rulesets/biology.list"}
+  sys-domains: { <<: *DOMAIN_LST, url: "https://raw.githubusercontent.com/yy1iang/oh-my-clash/refs/heads/main/rulesets/sys_resources.list"}
   github-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/github.mrs"}
   reddit-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/reddit.mrs"}
   synology-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/synology.mrs"}
+  spotify-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/spotify.mrs"}
   netflix-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/netflix.mrs"}
   meta-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/meta.mrs"}               # Facebook, Instegram, Whatsapp
   x-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/x.mrs"}                     # Twitter, Grok
   google-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/google.mrs"}
   apple-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/apple.mrs"}
   microsoft-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/microsoft.mrs"}
+  KR-domains: { <<: *DOMAIN_LST, url: "https://raw.githubusercontent.com/yy1iang/oh-my-clash/refs/heads/main/rulesets/korean.list"}
   CN-domains: { <<: *DOMAIN_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/cn.mrs"}
   CN-IPs: { <<: *IP_MRS, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/cn.mrs"}
 
@@ -100,7 +103,9 @@ rules:
   - RULE-SET,ai-domains,UnitedStates
   - RULE-SET,github-domains,UnitedStates
   - RULE-SET,reddit-domains,UnitedStates
+  - RULE-SET,sys-domains,HongKong
   - RULE-SET,bio-domains,HongKong
+  - RULE-SET,spotify-domains,HongKong
   - RULE-SET,netflix-domains,HongKong
   - RULE-SET,meta-domains,HongKong
   - RULE-SET,x-domains,HongKong
@@ -108,6 +113,7 @@ rules:
   - RULE-SET,microsoft-domains,HongKong
   - RULE-SET,apple-domains,DIRECT
   - RULE-SET,synology-domains,DIRECT
+  - RULE-SET,KR-domains,Korea
   - RULE-SET,CN-domains,DIRECT
   - RULE-SET,CN-IPs,DIRECT
   - MATCH,HongKong
