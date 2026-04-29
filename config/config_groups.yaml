@@ -1,0 +1,443 @@
+## Clash/Mihomo Config
+## Converted from Rules.ini (Subconverter format) to Mihomo YAML
+
+.VARIABLES:
+  - &SPEEDTEST_IV 300      # 5 minutes
+  - &UPDATE_IV 86400       # 24 hours
+  - &TOLERANCE 50          # ms
+
+
+## Subscription Provider
+proxy-providers:
+  provider_1:
+    type: http
+    url: ""  # 替换为你的订阅链接
+    proxy: DIRECT
+    interval: *UPDATE_IV
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: *SPEEDTEST_IV
+
+
+## Global Settings
+mixed-port: 7890
+allow-lan: true
+bind-address: "*"
+unified-delay: false
+tcp-concurrent: true
+mode: rule
+log-level: info
+ipv6: false
+find-process-mode: strict
+
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+geox-url:
+  geoip: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
+  geosite: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
+  mmdb: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.metadb"
+
+geo-auto-update: false
+geo-update-interval: 24
+
+external-controller: 0.0.0.0:9090
+
+
+## DNS Settings
+dns:
+  enable: true
+  ipv6: false
+  listen: 0.0.0.0:53
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - "*.lan"
+    - localhost.ptlogin2.qq.com
+  default-nameserver:
+    - 114.114.114.114
+    - 8.8.8.8
+  nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+
+
+## Proxy Groups
+proxy-groups:
+
+  # --- 功能组 ---
+  - name: 🚀 分组选择
+    type: select
+    proxies:
+      - ♻️ 自动选择
+      - 🔯 故障转移
+      - 👀 手动选择
+      - DIRECT
+      - 🇭🇰 香港节点
+      - 🇨🇳 台湾节点
+      - 🇸🇬 狮城节点
+      - 🇯🇵 日本节点
+      - 🇺🇲 美国节点
+      - 🇰🇷 韩国节点
+
+  - name: 👀 手动选择
+    type: select
+    include-all: true
+
+  - name: ♻️ 自动选择
+    type: url-test
+    include-all: true
+    filter: "(?i)香港|中港|中国-香港|hong"
+    url: https://www.gstatic.com/generate_204
+    interval: *SPEEDTEST_IV
+    tolerance: *TOLERANCE
+
+  - name: 🔯 故障转移
+    type: fallback
+    include-all: true
+    filter: "(?i)日本|沪日|japan|美国|美国高级|美国实验性|united"
+    url: https://www.gstatic.com/generate_204
+    interval: *SPEEDTEST_IV
+
+
+  # --- 媒体组 ---
+  - name: 🎶 Spotify
+    type: select
+    proxies:
+      - 🚀 分组选择
+      - ♻️ 自动选择
+      - DIRECT
+      - 🇮🇳 印度节点
+
+  - name: 🎵 AppleMusic
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 分组选择
+      - ♻️ 自动选择
+      - 🇭🇰 香港节点
+      - 🇺🇲 美国节点
+
+  - name: 📽️ Netflix
+    type: select
+    proxies:
+      - 🚀 分组选择
+      - ♻️ 自动选择
+      - 👀 手动选择
+      - 🇸🇬 狮城节点
+      - 🇭🇰 香港节点
+      - 🇨🇳 台湾节点
+      - 🇯🇵 日本节点
+      - 🇺🇲 美国节点
+
+  - name: 🎙️ Twitch
+    type: select
+    proxies:
+      - 🚀 分组选择
+      - ♻️ 自动选择
+      - 👀 手动选择
+      - 🇭🇰 香港节点
+      - 🇸🇬 狮城节点
+      - 🇺🇲 美国节点
+
+  - name: 🖥️ 国际媒体
+    type: select
+    proxies:
+      - 🚀 分组选择
+      - ♻️ 自动选择
+      - 👀 手动选择
+      - 🇭🇰 香港节点
+      - 🇨🇳 台湾节点
+      - 🇸🇬 狮城节点
+      - 🇯🇵 日本节点
+      - 🇺🇲 美国节点
+
+  # --- AI/科技组 ---
+  - name: ✨ AI
+    type: select
+    proxies:
+      - 🇺🇲 美国节点
+      - 🇯🇵 日本节点
+      - 🚀 分组选择
+      - ♻️ 自动选择
+      - 👀 手动选择
+      - 🇭🇰 香港节点
+      - 🇸🇬 狮城节点
+
+  - name: ✨ Nvidia
+    type: select
+    proxies:
+      - 🇭🇰 香港节点
+      - 🇨🇳 台湾节点
+      - 🇸🇬 狮城节点
+      - 🇯🇵 日本节点
+      - 🇺🇲 美国节点
+      - 🚀 分组选择
+      - ♻️ 自动选择
+      - 👀 手动选择
+
+  - name: 🔎 Google
+    type: select
+    proxies:
+      - 🚀 分组选择
+      - ♻️ 自动选择
+      - 👀 手动选择
+      - 🇺🇲 美国节点
+      - 🇭🇰 香港节点
+      - 🇨🇳 台湾节点
+      - 🇸🇬 狮城节点
+      - 🇯🇵 日本节点
+
+  # --- 平台组 ---
+  - name: 🍎 Apple
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 分组选择
+      - 👀 手动选择
+      - 🇺🇲 美国节点
+      - 🇭🇰 香港节点
+      - 🇨🇳 台湾节点
+      - 🇸🇬 狮城节点
+      - 🇯🇵 日本节点
+
+  - name: 🧑‍💻 GitHub
+    type: select
+    proxies:
+      - 🚀 分组选择
+      - ♻️ 自动选择
+      - DIRECT
+      - 🇭🇰 香港节点
+      - 🇺🇲 美国节点
+
+  - name: Ⓜ️ Microsoft
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 分组选择
+      - 👀 手动选择
+      - 🇺🇲 美国节点
+      - 🇭🇰 香港节点
+      - 🇨🇳 台湾节点
+      - 🇸🇬 狮城节点
+      - 🇯🇵 日本节点
+
+  - name: 📲 Telegram
+    type: select
+    proxies:
+      - 🚀 分组选择
+      - ♻️ 自动选择
+      - 👀 手动选择
+      - 🇸🇬 狮城节点
+      - 🇭🇰 香港节点
+      - 🇨🇳 台湾节点
+      - 🇯🇵 日本节点
+      - 🇺🇲 美国节点
+
+  # --- 游戏组 ---
+  - name: 🎮 游戏平台
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 分组选择
+      - 👀 手动选择
+      - 🇺🇲 美国节点
+      - 🇭🇰 香港节点
+      - 🇸🇬 狮城节点
+      - 🇯🇵 日本节点
+      - 🇰🇷 韩国节点
+
+  - name: 🎮 游戏下载
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 分组选择
+      - 👀 手动选择
+      - 🇺🇲 美国节点
+      - 🇭🇰 香港节点
+      - 🇸🇬 狮城节点
+      - 🇯🇵 日本节点
+
+  # --- 特殊组 ---
+
+  - name: 🎯 直连网站
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 分组选择
+      - ♻️ 自动选择
+
+  - name: 🚫 广告屏蔽
+    type: select
+    proxies:
+      - REJECT
+      - DIRECT
+
+  - name: 🚫 封禁网站
+    type: select
+    proxies:
+      - ♻️ 自动选择
+      - 🔯 故障转移
+      - 👀 手动选择
+      - DIRECT
+      - 🇭🇰 香港节点
+      - 🇨🇳 台湾节点
+      - 🇸🇬 狮城节点
+      - 🇯🇵 日本节点
+      - 🇺🇲 美国节点
+      - 🇰🇷 韩国节点
+
+  - name: 🐟 其他
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 分组选择
+      - ♻️ 自动选择
+      - 🔯 故障转移
+      - 👀 手动选择
+
+  # --- 地区节点 ---
+  - name: 🇭🇰 香港节点
+    type: url-test
+    include-all: true
+    filter: "(?i)香港|中港|中国-香港|hong"
+    url: https://www.gstatic.com/generate_204
+    interval: *SPEEDTEST_IV
+    tolerance: *TOLERANCE
+
+  - name: 🇨🇳 台湾节点
+    type: select
+    include-all: true
+    filter: "(?i)台湾|中国-台湾|taiwan"
+
+  - name: 🇸🇬 狮城节点
+    type: url-test
+    include-all: true
+    filter: "(?i)新加坡|singapore"
+    url: https://www.gstatic.com/generate_204
+    interval: *SPEEDTEST_IV
+    tolerance: *TOLERANCE
+
+  - name: 🇯🇵 日本节点
+    type: select
+    include-all: true
+    filter: "(?i)日本|沪日|japan"
+
+  - name: 🇺🇲 美国节点
+    type: select
+    include-all: true
+    filter: "(?i)美国|美国高级|美国实验性|united"
+
+  - name: 🇰🇷 韩国节点
+    type: select
+    include-all: true
+    filter: "(?i)KR|korea|KOR|首尔|韩|韓"
+
+  - name: 🇮🇳 印度节点
+    type: url-test
+    include-all: true
+    filter: "(?i)印度|india"
+    url: https://www.gstatic.com/generate_204
+    interval: *SPEEDTEST_IV
+    tolerance: *TOLERANCE
+
+
+## Rule Providers
+rule-anchor:
+  .LST: &LST {type: http, interval: *UPDATE_IV, behavior: classical, format: text, proxy: 🚀 分组选择}
+  .YML: &YML {type: http, interval: *UPDATE_IV, behavior: classical, format: yaml, proxy: 🚀 分组选择}
+
+rule-providers:
+  # 直连规则
+  lan:           { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Lan/Lan.list" }
+  direct:        { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Direct/Direct.list" }
+  tencent:       { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Tencent/Tencent.list" }
+  sina:          { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Sina/Sina.list" }
+  bytedance:     { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ByteDance/ByteDance.list" }
+  download:      { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Download/Download.list" }
+  chinamax:      { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ChinaMax/ChinaMax.list" }
+  # 广告屏蔽规则
+  advertising:   { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/AdvertisingLite/AdvertisingLite.list" }
+  privacy:       { <<: *YML, url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Privacy/Privacy.yaml" }
+  hijacking:     { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Hijacking/Hijacking.list" }
+  easyprivacy:   { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/EasyPrivacy/EasyPrivacy.list" }
+  # 媒体规则
+  spotify:       { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Spotify/Spotify.list" }
+  apple-music:   { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/AppleMusic/AppleMusic.list" }
+  google:        { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Google/Google.list" }
+  ai:            { <<: *LST, url: "https://raw.githubusercontent.com/yy1iang/oh-my-clash/refs/heads/main/rulesets/ai.list" }
+  nvidia:        { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Nvidia/Nvidia.list" }
+  twitch:        { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Twitch/Twitch.list" }
+  netflix:       { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Netflix/Netflix.list" }
+  globalmedia:   { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GlobalMedia/GlobalMedia.list" }
+  # 游戏规则
+  steam:         { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Steam/Steam.list" }
+  epic:          { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Epic/Epic.list" }
+  playstation:   { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/PlayStation/PlayStation.list" }
+  rockstar:      { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Rockstar/Rockstar.list" }
+  ea:            { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/EA/EA.list" }
+  xbox:          { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Xbox/Xbox.list" }
+  origin:        { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Origin/Origin.list" }
+  game-download: { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Game/GameDownload/GameDownload.list" }
+  game-downloadcn: { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Game/GameDownloadCN/GameDownloadCN.list" }
+  # 平台规则
+  apple:         { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Apple/Apple.list" }
+  github:        { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GitHub/GitHub.list" }
+  microsoft:     { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Microsoft/Microsoft.list" }
+  telegram:      { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Telegram/Telegram.list" }
+  # 封禁规则（需走代理）
+  proxy-list:    { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Proxy/Proxy.list" }
+  twitter:       { <<: *LST, url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Twitter/Twitter.list" }
+
+
+## Rules（顺序与原 Rules.ini 保持一致）
+rules:
+  # 直连优先
+  - RULE-SET,lan,🎯 直连网站
+  - RULE-SET,direct,🎯 直连网站
+  - RULE-SET,tencent,🎯 直连网站
+  - RULE-SET,sina,🎯 直连网站
+  - RULE-SET,bytedance,🎯 直连网站
+  - RULE-SET,game-downloadcn,🎯 直连网站
+  # 广告屏蔽
+  - RULE-SET,advertising,🚫 广告屏蔽
+  - RULE-SET,privacy,🚫 广告屏蔽
+  - RULE-SET,hijacking,🚫 广告屏蔽
+  - RULE-SET,easyprivacy,🚫 广告屏蔽
+  # 媒体
+  - RULE-SET,spotify,🎶 Spotify
+  - RULE-SET,apple-music,🎵 AppleMusic
+  - RULE-SET,google,🔎 Google
+  - RULE-SET,ai,✨ AI
+  - RULE-SET,nvidia,✨ Nvidia
+  - RULE-SET,twitch,🎙️ Twitch
+  - RULE-SET,netflix,📽️ Netflix
+  - RULE-SET,globalmedia,🖥️ 国际媒体
+  # 游戏
+  - RULE-SET,steam,🎮 游戏平台
+  - RULE-SET,epic,🎮 游戏平台
+  - RULE-SET,playstation,🎮 游戏平台
+  - RULE-SET,rockstar,🎮 游戏平台
+  - RULE-SET,ea,🎮 游戏平台
+  - RULE-SET,xbox,🎮 游戏平台
+  - RULE-SET,origin,🎮 游戏平台
+  - RULE-SET,game-download,🎮 游戏下载
+  # 平台
+  - RULE-SET,apple,🍎 Apple
+  - RULE-SET,github,🧑‍💻 GitHub
+  - RULE-SET,microsoft,Ⓜ️ Microsoft
+  - RULE-SET,telegram,📲 Telegram
+  # 下载直连
+  - RULE-SET,download,🎯 直连网站
+  # 封禁（走代理）
+  - RULE-SET,proxy-list,🚫 封禁网站
+  - RULE-SET,twitter,🚫 封禁网站
+  # 中国大陆直连
+  - RULE-SET,chinamax,🎯 直连网站
+  - GEOIP,CN,🎯 直连网站
+  # 兜底
+  - MATCH,🐟 其他
