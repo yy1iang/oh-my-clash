@@ -51,6 +51,8 @@ dns:
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter:
     - "*.lan"
+    - "*.local"
+    - "homeassistant"
   nameserver:
     - 223.5.5.5       # Aliyun
     - 119.29.29.29    # Tencent
@@ -98,8 +100,9 @@ rule-providers:
 
 ## Assign Proxy Group to Rule Set
 rules:
-  - SRC-IP-CIDR,192.168.2.136/32,DIRECT    # webcam
-  - SRC-IP-CIDR,192.168.2.171/32,DIRECT    # webcam
+  - IP-CIDR,192.168.0.0/16,DIRECT
+  - IP-CIDR,10.0.0.0/8,DIRECT
+  - IP-CIDR,172.16.0.0/12,DIRECT
   - RULE-SET,ai-domains,UnitedStates
   - RULE-SET,github-domains,UnitedStates
   - RULE-SET,reddit-domains,UnitedStates

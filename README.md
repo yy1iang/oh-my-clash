@@ -6,13 +6,26 @@
 >
 > **Updated:** Apr 29, 2026
 
-## YAML-only Configuration
+## Option 1: YAML-only Configuration
 
-- [`config/config.yaml`](./config/config.yaml): A one-step universal configuration template for [mihomo](https://github.com/metacubex/mihomo) kernel, handling everything from provider node fetching to traffic control.
-- [`config/config_groups.yaml`](./config/config_groups.yaml): A fine-grained configuration with **labeled proxy groups**, providing dedicated select/url-test/fallback proxy strategies per group, covering a wide range of services (Spotify, Netflix, etc.).
+Just import YAML config to your Clash client.
+
+### Usage
+
+- [`config/config_regn_groups.yaml`](./config/config.yaml): A one-step universal configuration template for [mihomo](https://github.com/metacubex/mihomo) kernel, handling everything from provider node fetching to traffic control. Nodes were grouped and distributed by regions.
+- [`config/config_func_groups.yaml`](./config/config_func_groups.yaml): A fine-grained configuration with **labeled proxy groups**, providing dedicated select/url-test/fallback proxy strategies per group, covering a wide range of services (Spotify, Netflix, etc.).
 - [`rulesets/`](./rulesets/): A collection of curated rulesets from various providers alongside custom rules.
 
-## Conversion-Based Configuration
+### Default Settings
+
+- **Auto-update:** Nodes are fetched every **24 hours**.
+- **Health Check:** Nodes undergo a delay test every **5 minutes**.
+- **Grouping:** Proxies are automatically grouped by region.
+- **Rule Provider:** Powered by [MetaCubeX](https://github.com/MetaCubeX/meta-rules-dat/tree/meta).
+
+---
+
+## Option 2: Conversion-Based Configuration
 
 Easily convert a subscription link into a configuration file using a specified template (or the default one).
 
@@ -53,7 +66,7 @@ Options:
 ./bin/url2yaml.sh \
     -i "https://your-link" \
     -t clash \
-    -c "https://raw.githubusercontent.com/your-config" \
+    -c "https://raw.githubusercontent.com/config.ini" \
     -o config.yaml
 ```
 
@@ -62,14 +75,4 @@ Options:
 ./bin/url2yaml.sh -i "https://your-link" -t clash
 ```
 
-## 3.  External Configuration
-
-- [`config/config_groups.ini`](./config/config_groups.ini): An example of external configuration file with labeled proxy groups for conversion-based configuration.
-
-## Default Settings
-
-- **Auto-update:** Nodes are fetched every **24 hours**.
-- **Health Check:** Nodes undergo a delay test every **5 minutes**.
-- **Grouping:** Proxies are automatically grouped by region.
-- **Rule Provider:** Powered by [MetaCubeX](https://github.com/MetaCubeX/meta-rules-dat/tree/meta).
 
